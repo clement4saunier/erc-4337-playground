@@ -1,34 +1,44 @@
-## Usage
+## Account Abstraction (ERC-4337)
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+Account abstraction is a way for accounts on ethereum to have arbitrary validation logic, by routing the verification to a smart contract function.
+It also allows users to submit transactions without interacting directly with their wallets, which can greatly increase the UX of Ethereum.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+### ERC-4338 Pipeline
 
-```bash
-$ npm install # or pnpm install or yarn install
-```
+![image](./documentation/erc4337pipeline.png)
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+This repository uses 
 
-## Available Scripts
+###
 
-In the project directory, you can run:
+## Account Abstraction playground
+
+In the project directory, you will find a collection of `contracts` implementing this standard and an
+interactive dApp for education and testing purposes. The goal is the explore the possibilities which
+includes:
+
+* Having NFT owners able to validate transactions.
+* Validating a transaction with a password.
+* Sending a transaction through email, SMS or any means supported by a bundler.
+
+The amount of features unlock this standard provides is obviously very big because only limited by
+the logic you choose to code in your own smart wallet.
+
 
 ### `npm dev` or `npm start`
 
-Runs the app in the development mode.<br>
+Runs the web app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
 
 ### `npm run build`
 
-Builds the app for production to the `dist` folder.<br>
+Builds the web app for production to the `dist` folder.
 It correctly bundles Solid in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### `npx hardhat test`
 
-## Deployment
+Executes unit tests for smart contracts.
 
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+### `npx hardhat run [scriptPath]`
+
+Executes a script to use smart contracts, the provided [hardhat.config.js](./hardhat.config.js) supports Goerli, Sepolia and Mainnet.

@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.3",
-    "account-abstraction": "file:4337implementation",
+    "account-abstraction": "file:4337-implementation",
     "solid-js": "^1.6.10"
   }
 }
