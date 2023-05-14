@@ -1,0 +1,22 @@
+:root {
+    --color-bg: #FFFFFF;
+    --color-bg-alt: #F5F5F0;
+    --color-txt: #010101;
+    --color-txt-alt: #FFFFFF;
+
+    --color-accent-0: #FC662D;
+    --color-accent-1: #5ECF99;
+    --color-accent-2: #54DAEC;
+    --color-accent-3: #FFD73F;
+
+    --radius-s: 4px; /* content */
+    --radius-m: 6px; /* buttons */
+    --radius-l: 8px; /* cards */
+
+    --space-s: 2px;
+    --space-m: 6px;
+    --space-l: 12px;
+
+    --border-m: 3px;
+    --color-border: #010101;
+}

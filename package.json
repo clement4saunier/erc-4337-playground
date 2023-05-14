@@ -35,7 +35,9 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.8.3",
+    "@solidjs/router": "^0.8.2",
     "account-abstraction": "file:4337-implementation",
+    "solid-icons": "^1.0.4",
     "solid-js": "^1.6.10"
   }
 }

@@ -1,33 +1,99 @@
-.App {
-  text-align: center;
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "nav main"
+    "nav main";
+  grid-template-columns: auto calc(100vw - 200px);
+  grid-template-rows: 64px auto;
+
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  height: 100vh;
+
+  box-sizing: border-box;
+  background-color: var(--color-border);
+
+  transition-duration: 500ms;
 }
 
-.logo {
-  animation: logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+
+.layout.fullscreen {
+  grid-template-columns: auto calc(100vw - var(--border-m));
 }
 
-.header {
-  background-color: #282c34;
-  min-height: 100vh;
+.layout header {
+  grid-row: header;
+  grid-column: header;
+
+  background-color: var(--color-accent-3);
+  margin: var(--border-m);
+  margin-bottom: 0;
+  border-bottom-left-radius: var(--radius-m);
+  border-bottom-right-radius: var(--radius-m);
+  border-top-left-radius: var(--radius-m);
+  border-top-right-radius: var(--radius-m);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-l);
+}
+
+.layout nav a {
+    border-bottom: 2px solid var(--color-border);
+    text-decoration: none;
+    color: var(--color-txt);
+    font-size: large;
+    align-items: center;
+    display: flex;
+    gap: var(--space-m);
+}
+
+.selected {
+    backdrop-filter: brightness(92%);
+}
+
+.layout main {
+  grid-row: main;
+  grid-column: main;
+
+  background-color: var(--color-bg);
+  border-top-left-radius: var(--radius-m);
+  border-top-right-radius: var(--radius-m);
+  
+  margin: var(--border-m);
+  margin-bottom: 0;
+
+  position: relative;
+}
+
+.layout nav {
+  grid-row: nav;
+  grid-column: nav;
+
+  background-color: rgb(128, 105, 0);
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: var(--color-bg-alt);
+  border-top-left-radius: var(--radius-m);
+  border-top-right-radius: var(--radius-m);
+  margin: var(--border-m);
+  margin-right: 0;
+  margin-bottom: 0;
+
+  position: relative;
+  overflow: hidden;
 }
 
-.link {
-  color: #b318f0;
+.layout nav > * {
+  min-width: 200px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.layout nav a {
+    width: auto;
+    font-weight: bold;
+    padding: var(--space-l);
 }
