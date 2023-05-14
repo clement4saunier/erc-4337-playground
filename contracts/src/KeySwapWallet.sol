@@ -23,6 +23,8 @@ contract KeySwapWallet is BaseAccount {
         _entryPoint = _entryPointSingleton;
     }
 
+    receive() external payable {}
+
     // Allows BaseAccount to call entryPoint
     function entryPoint() public view override returns (IEntryPoint) {
         return _entryPoint;
@@ -30,10 +32,25 @@ contract KeySwapWallet is BaseAccount {
 
     // Swaps the owner key
     function swapKey(address newOwner) external {
-        // require(msg.sender == owner, "Not owner");
-        console.log("???");
-
+        require(msg.sender == owner || msg.sender == address(this), "Sender not owner");
         owner = newOwner;
+    }
+
+    // External function for calling _call, can only be called by owner or entrypoint
+    function execute(address dest, uint256 value, bytes calldata func) external {
+        require(msg.sender == owner || msg.sender == address(entryPoint()), "not from entrypoint");
+
+        _call(dest, value, func);
+    }
+
+    // Calls function from wallet.
+    function _call(address target, uint256 value, bytes memory data) internal {
+        (bool success, bytes memory result) = target.call{value: value}(data);
+        if (!success) {
+            assembly {
+                revert(add(result, 32), mload(result))
+            }
+        }
     }
 
     // Validation logic, here if owner is signer of userOperation.

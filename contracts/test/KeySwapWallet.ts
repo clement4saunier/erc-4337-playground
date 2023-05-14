@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import { UserOperation } from "account-abstraction/test/UserOperation";
 import { ethers } from "hardhat";
-import { fillAndSignUserOp } from "./UserOpUtils";
+import { fillAndSignUserOp, getUserOpHash } from "./UserOpUtils";
+import { arrayify, parseEther } from "ethers/lib/utils";
 
 // interface UserOperation {
 //     sender: typ.address
@@ -17,8 +18,8 @@ import { fillAndSignUserOp } from "./UserOpUtils";
 //     signature: typ.bytes
 // }
 
-describe("KeySwapWallet", function() {
-  async function deployWalletAndContext(ownerAddress) {
+describe("KeySwapWallet", function () {
+  async function deployWalletAndContext(ownerAddress: string) {
     const EntryPoint = await ethers.getContractFactory("EntryPoint");
     const entryPoint = await EntryPoint.deploy();
 
@@ -28,8 +29,8 @@ describe("KeySwapWallet", function() {
     return { wallet, entryPoint };
   }
 
-  describe("Deployment", function() {
-    it("Should set the right owner & entryPoint", async function() {
+  describe("Deployment", function () {
+    it("Should set the right owner & entryPoint", async function () {
       const [owner] = await ethers.getSigners();
       const { wallet, entryPoint } = await deployWalletAndContext(owner.address);
 
@@ -38,21 +39,45 @@ describe("KeySwapWallet", function() {
     });
   });
 
-  describe("UserOperation Handling", function() {
-    it("Should receive and validate UserOperation", async function() {
+  describe("Direct Handling", function () {
+    it("Should be able to execute function from smart wallet directly", async function () {
       const [owner, alt] = await ethers.getSigners();
       const { wallet, entryPoint } = await deployWalletAndContext(owner.address);
       const swapOwnerCall = wallet.interface.encodeFunctionData("swapKey", [alt.address]);
 
-      const userOp = await fillAndSignUserOp({
-        sender: wallet.address,
-        callData: swapOwnerCall
-      }, owner, entryPoint.address);
+      expect(await wallet.owner()).to.equal(owner.address);
 
-      console.log("before owner?", await wallet.owner());
-      const txn = await entryPoint.handleOps([userOp], owner.address);
-      console.log("owner?", await wallet.owner());
-      
+      await wallet.execute(wallet.address, 0, swapOwnerCall);
+
+      expect(await wallet.owner()).to.equal(alt.address);
+    });
+  });
+
+  describe("UserOperation Handling", function () {
+    it("Should execute trough UserOperation", async function () {
+      const [owner, alt] = await ethers.getSigners();
+      const { wallet, entryPoint } = await deployWalletAndContext(owner.address);
+      const chainId = await ethers.provider.getNetwork().then(net => net.chainId);
+
+      const swapOwnerCall = wallet.interface.encodeFunctionData("swapKey", [alt.address]);
+      const executeSwapCall = wallet.interface.encodeFunctionData("execute", [
+        wallet.address,
+        0,
+        swapOwnerCall
+      ]);
+
+      const userOp = await fillAndSignUserOp(
+        {
+          sender: wallet.address,
+          callData: executeSwapCall,
+          verificationGasLimit: 1e6,
+          callGasLimit: 1e6
+        },
+        owner,
+        entryPoint.address
+      );
+
+      await entryPoint.connect(alt).handleOps([userOp], owner.address);
 
       expect(await wallet.owner()).to.equal(alt.address);
     });

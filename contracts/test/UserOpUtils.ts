@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from "@ethersproject/abi";
 import { UserOperation } from "account-abstraction/test/UserOperation";
-import { Contract, Signer, Wallet } from "ethers";
+import { BigNumber, Contract, Signer, Wallet } from "ethers";
 import { arrayify, keccak256 } from "ethers/lib/utils";
 import { ethers } from "hardhat";
 
