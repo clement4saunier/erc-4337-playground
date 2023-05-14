@@ -69,9 +69,7 @@ describe("KeySwapWallet", function () {
       const userOp = await fillAndSignUserOp(
         {
           sender: wallet.address,
-          callData: executeSwapCall,
-          verificationGasLimit: 1e6,
-          callGasLimit: 1e6
+          callData: executeSwapCall
         },
         owner,
         entryPoint.address

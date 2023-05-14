@@ -103,7 +103,7 @@ export async function fillUserOp(
     userOp.callGasLimit = estimatedGas;
   }
 
-  return fillUserOpDefaults(op);
+  return fillUserOpDefaults(userOp);
 }
 
 export async function fillAndSignUserOp(
